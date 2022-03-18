@@ -1,4 +1,4 @@
-module github.com/otus_golang/hw02_unpack_string
+module github.com/MilkyWay-core/otus_golang/tree/master/hw02_unpack_string
 
 go 1.17
 
