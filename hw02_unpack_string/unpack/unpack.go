@@ -46,7 +46,7 @@ func isNumber(char byte) bool {
 }
 
 func isChar(char byte) bool {
-	if char >= 65 && char <= 99 || char >= 97 && char <= 122 {
+	if char >= 65 && char <= 99 || char >= 97 && char <= 122 || char == 0x0A {
 		return true
 	}
 	return false
