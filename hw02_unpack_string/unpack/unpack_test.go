@@ -2,9 +2,9 @@ package unpack
 
 import (
 	"errors"
-	"testing"
-
 	"github.com/stretchr/testify/require"
+	"math/rand"
+	"testing"
 )
 
 func TestUnpack(t *testing.T) {
@@ -43,4 +43,26 @@ func TestUnpackInvalidString(t *testing.T) {
 			require.Truef(t, errors.Is(err, ErrInvalidString), "actual error %q", err)
 		})
 	}
+}
+func TestUnpackRandString(t *testing.T) {
+	const goodChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0987654321"
+	var resultByts []byte
+	n := 0
+	for n < rand.Intn(100) {
+		randChar := goodChar[rand.Intn(len(goodChar))]
+		if isNumber(randChar) && (n != 0 || !isNumber(resultByts[n-1])) {
+			resultByts = append(resultByts, goodChar[rand.Intn(len(goodChar))])
+			n++
+		}
+		if isChar(randChar) {
+			resultByts = append(resultByts, goodChar[rand.Intn(len(goodChar))])
+			n++
+		}
+	}
+	resultString := string(resultByts)
+	t.Run(resultString, func(t *testing.T) {
+		_, err := Unpack(resultString)
+		require.NoError(t, err)
+	})
+
 }
