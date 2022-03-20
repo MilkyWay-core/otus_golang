@@ -18,12 +18,12 @@ func Unpack(str string) (string, error) {
 			return "", ErrInvalidString
 		case isNumber(str[i]):
 			var s, _ = strconv.Atoi(string(str[i]))
-			//if number is 0 then delete last char
+			// if number is 0 then delete last char
 			if s == 0 {
 				result_byte = result_byte[:len(result_byte)-1]
 				break swt
 			}
-			//copy char
+			// copy char
 			for n := 0; n < s-1; n++ {
 				result_byte = append(result_byte, str[i-1])
 			}
