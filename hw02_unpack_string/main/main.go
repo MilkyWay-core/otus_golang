@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 
-	"github.com/MilkyWay-core/otus_golang/hw02_unpack_string/hw02unpackstring"
+	hw02unpackstring "github.com/MilkyWay-core/otus_golang/hw02_unpack_string"
 )
 
 func main() {
