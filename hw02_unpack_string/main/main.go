@@ -7,14 +7,14 @@ import (
 )
 
 func main() {
-	var user_string string
+	var userString string
 	fmt.Println("Enter you text: ")
-	num, err := fmt.Scan(&user_string)
+	num, err := fmt.Scan(&userString)
 	if (err != nil) || (num == 0) {
 		fmt.Println(hw02unpackstring.ErrInvalidString)
 		return
 	}
-	result, err := hw02unpackstring.Unpack(user_string)
+	result, err := hw02unpackstring.Unpack(userString)
 	if err != nil {
 		fmt.Println(err)
 		return

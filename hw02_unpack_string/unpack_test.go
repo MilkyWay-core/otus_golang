@@ -2,9 +2,10 @@ package hw02unpackstring
 
 import (
 	"errors"
-	"github.com/stretchr/testify/require"
 	"math/rand"
 	"testing"
+
+	"github.com/stretchr/testify/require"
 )
 
 func TestUnpack(t *testing.T) {
@@ -45,6 +46,7 @@ func TestUnpackInvalidString(t *testing.T) {
 		})
 	}
 }
+
 func TestUnpackRandString(t *testing.T) {
 	const goodChar = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0987654321"
 	var resultByts []byte
@@ -65,5 +67,4 @@ func TestUnpackRandString(t *testing.T) {
 		_, err := Unpack(resultString)
 		require.NoError(t, err)
 	})
-
 }

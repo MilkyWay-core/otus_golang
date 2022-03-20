@@ -8,7 +8,7 @@ import (
 var ErrInvalidString = errors.New("invalid string")
 
 func Unpack(str string) (string, error) {
-	var result_byte []byte
+	var resultByte []byte
 	for i := 0; i < len(str); i++ {
 	swt:
 		switch {
@@ -17,25 +17,25 @@ func Unpack(str string) (string, error) {
 		case isNumber(str[i]) && isNumber(str[i-1]): // only number is not more 9
 			return "", ErrInvalidString
 		case isNumber(str[i]):
-			var s, _ = strconv.Atoi(string(str[i]))
+			s, _ := strconv.Atoi(string(str[i]))
 			// if number is 0 then delete last char
 			if s == 0 {
-				result_byte = result_byte[:len(result_byte)-1]
+				resultByte = resultByte[:len(resultByte)-1]
 				break swt
 			}
 			// copy char
 			for n := 0; n < s-1; n++ {
-				result_byte = append(result_byte, str[i-1])
+				resultByte = append(resultByte, str[i-1])
 			}
 			break swt
 		case isChar(str[i]):
-			result_byte = append(result_byte, str[i])
+			resultByte = append(resultByte, str[i])
 			break swt
 		default:
 			return "", ErrInvalidString
 		}
 	}
-	return string(result_byte), nil
+	return string(resultByte), nil
 }
 
 func isNumber(char byte) bool {
