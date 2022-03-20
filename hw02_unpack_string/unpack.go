@@ -12,9 +12,9 @@ func Unpack(str string) (string, error) {
 	for i := 0; i < len(str); i++ {
 	swt:
 		switch {
-		case isNumber(str[i]) && i == 0: //first char must by dont number
+		case isNumber(str[i]) && i == 0: // first char must by dont number
 			return "", ErrInvalidString
-		case isNumber(str[i]) && isNumber(str[i-1]): //only number is not more 9
+		case isNumber(str[i]) && isNumber(str[i-1]): // only number is not more 9
 			return "", ErrInvalidString
 		case isNumber(str[i]):
 			var s, _ = strconv.Atoi(string(str[i]))
