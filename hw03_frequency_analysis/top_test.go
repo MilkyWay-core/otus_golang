@@ -43,7 +43,7 @@ var text = `Как видите, он  спускается  по  лестни�
 	посидеть у огня и послушать какую-нибудь интересную сказку.
 		В этот вечер...`
 
-var text_eng = `walk from the cathedral. Fully equipped kitchen, 
+var testEng = `walk from the cathedral. Fully equipped kitchen, 
 living room with a large sofa and chairs, big TV and balcony. 
 The balcony has space for four people to sit and gets the sun in the mornings, 
 and the flat is light and warm. It has Wi-Fi and fast internet. 
@@ -103,7 +103,7 @@ func TestTop10_eng(t *testing.T) {
 			"has",
 			"in",
 		}
-		require.Equal(t, expected, Top10(text_eng))
+		require.Equal(t, expected, Top10(testEng))
 	})
 }
 

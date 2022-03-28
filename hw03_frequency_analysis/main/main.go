@@ -17,5 +17,4 @@ func main() {
 	for _, word := range words {
 		fmt.Println(word)
 	}
-
 }

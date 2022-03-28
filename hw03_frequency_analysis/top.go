@@ -20,7 +20,7 @@ func constructor(cl countedList) countedList {
 	return cl
 }
 
-func (cl countedList) add(wc wordCounted) countedList { //Was adding only uniq word
+func (cl countedList) add(wc wordCounted) countedList { // Was adding only uniq word
 	for _, wordCounter := range cl.words {
 		if wordCounter.word == wc.word {
 			return cl
@@ -33,8 +33,7 @@ func (cl countedList) add(wc wordCounted) countedList { //Was adding only uniq w
 func Top10(str string) []string {
 	fmt.Println("start")
 	words := strings.Fields(str)
-	var resultArray []string
-	var cl countedList = constructor(countedList{})
+	cl := constructor(countedList{})
 	for i, word := range words { // will counted  words in string
 		var counterWord uint
 		for n := i; n < len(words); n++ {
@@ -44,11 +43,14 @@ func Top10(str string) []string {
 		}
 		cl = cl.add(wordCounted{counterWord, word})
 	}
-	sort.SliceStable(cl.words, func(i, j int) bool { //sort in structure
-		return cl.words[i].count > cl.words[j].count || (cl.words[i].count == cl.words[j].count && cl.words[i].word < cl.words[j].word)
+	sort.SliceStable(cl.words, func(i, j int) bool { // sort in structure
+		return cl.words[i].count > cl.words[j].count ||
+			(cl.words[i].count == cl.words[j].count &&
+				cl.words[i].word < cl.words[j].word)
 	})
 	fmt.Println(cl.words)
-	for i, word := range cl.words { //convert structure to string array
+	resultArray := make([]string, 0)
+	for i, word := range cl.words { // convert structure to string array
 		if i > 9 {
 			break
 		}
@@ -56,5 +58,4 @@ func Top10(str string) []string {
 	}
 
 	return resultArray
-
 }
