@@ -21,10 +21,10 @@ type list struct {
 }
 
 func (list *list) Len() int {
-	var i int = 0
-	first_item := list.Front()
-	for first_item != nil {
-		first_item = first_item.Next
+	var i int
+	firstItem := list.Front()
+	for firstItem != nil {
+		firstItem = firstItem.Next
 		i++
 	}
 	return i
@@ -53,14 +53,12 @@ func (list *list) Back() *ListItem {
 func (list *list) PushFront(v interface{}) *ListItem {
 	item := new(ListItem)
 	item.Value = v
-	first_item := list.Front()
-	if first_item == nil {
+	if firstItem := list.Front(); firstItem == nil {
 		list.items = item
 	} else {
-		item.Next = first_item
-		first_item.Prev = item
+		item.Next = firstItem
+		firstItem.Prev = item
 		item.Prev = nil
-
 	}
 	return item
 }
@@ -68,12 +66,11 @@ func (list *list) PushFront(v interface{}) *ListItem {
 func (list *list) PushBack(v interface{}) *ListItem {
 	item := new(ListItem)
 	item.Value = v
-	last_item := list.Back()
-	if last_item == nil {
+	if lastItem := list.Back(); lastItem == nil {
 		list.items = item
 	} else {
-		item.Prev = last_item
-		last_item.Next = item
+		item.Prev = lastItem
+		lastItem.Next = item
 		item.Next = nil
 	}
 	return item
@@ -82,23 +79,21 @@ func (list *list) PushBack(v interface{}) *ListItem {
 func (list *list) Remove(i *ListItem) {
 	if i.Prev != nil {
 		i.Prev.Next = i.Next
-		list.items = i.Prev //сдвигаем курсор с удаляемого
+		list.items = i.Prev // сдвигаем курсор с удаляемого
 	}
 	if i.Next != nil {
 		i.Next.Prev = i.Prev
 		list.items = i.Next
 	}
 	if i.Next == nil && i.Prev == nil {
-		list.items = nil //если едиственный элемент в списке то очищаем курсор
+		list.items = nil // если едиственный элемент в списке то очищаем курсор
 	}
-	i = nil
 }
 
 func (list *list) MoveToFront(i *ListItem) {
 	tmp := i.Value
 	list.Remove(i)
 	list.PushFront(tmp)
-
 }
 
 func NewList() List {

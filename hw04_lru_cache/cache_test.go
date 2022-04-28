@@ -49,41 +49,39 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
-	t.Run("purge logic", func(t *testing.T) { //на логику выталкивания элементов из-за размера очереди
+	t.Run("purge logic", func(t *testing.T) { // на логику выталкивания элементов из-за размера очереди
 		c := NewCache(3)
 		c.Set("a", 1)
 		c.Set("b", 2)
 		c.Set("c", 3)
 		c.Set("d", 4)
-		//c b a
+		// c b a
 		val, ok := c.Get("a")
 		require.False(t, ok)
 		require.Nil(t, val)
-
 	})
-	t.Run("purge old item logic", func(t *testing.T) { //на логику выталкивания давно используемых элементов
+	t.Run("purge old item logic", func(t *testing.T) { // на логику выталкивания давно используемых элементов
 		c := NewCache(3)
 		c.Set("a", 1)
 		c.Set("b", 2)
 		c.Set("c", 3)
-		//c b a
+		// c b a
 		c.Set("a", 11)
-		//a c b
+		// a c b
 		c.Get("b")
-		//b a c
+		// b a c
 		c.Set("d", 4)
-		//d b a
+		// d b a
 		val, ok := c.Get("c")
 		require.False(t, ok)
 		require.Nil(t, val)
-
 	})
-	t.Run("purge old item logic", func(t *testing.T) { //Очистка
+	t.Run("purge old item logic", func(t *testing.T) { // Очистка
 		c := NewCache(3)
 		c.Set("a", 1)
 		c.Set("b", 2)
 		c.Set("c", 3)
-		//c b a
+		// c b a
 		c.Clear()
 
 		val, ok := c.Get("a")
@@ -102,11 +100,10 @@ func TestCache(t *testing.T) {
 
 		require.False(t, wasInCache)
 	})
-
 }
 
 func TestCacheMultithreading(t *testing.T) {
-	t.Skip() // Remove me if task with asterisk completed.
+	t.Skip() //  Remove me if task with asterisk completed.
 
 	c := NewCache(10)
 	wg := &sync.WaitGroup{}

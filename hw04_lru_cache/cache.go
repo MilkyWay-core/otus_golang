@@ -18,26 +18,26 @@ func (cache *lruCache) Get(key Key) (interface{}, bool) {
 	if cache.capacity == 0 {
 		return nil, false
 	}
-	finded_element := cache.items[key]
-	if finded_element == nil {
+	findedElement := cache.items[key]
+	if findedElement == nil {
 		return nil, false
 	}
-	cache.queue.MoveToFront(finded_element)
-	return finded_element.Value.(*cacheItem).value, true
+	cache.queue.MoveToFront(findedElement)
+	return findedElement.Value.(*cacheItem).value, true
 }
 
 func (cache *lruCache) Set(key Key, value interface{}) bool {
-	//логику выталкивания элементов из-за размера очереди
+	// логику выталкивания элементов из-за размера очереди
 	if cache.queue.Len()+1 > cache.capacity {
-		removing_element := cache.queue.Back()                       //получаем последний
-		delete(cache.items, removing_element.Value.(*cacheItem).key) //удаляем из кеша
-		cache.queue.Remove(removing_element)                         //удаляем из очереди
+		removingElement := cache.queue.Back()                       // получаем последний
+		delete(cache.items, removingElement.Value.(*cacheItem).key) // удаляем из кеша
+		cache.queue.Remove(removingElement)                         // удаляем из очереди
 	}
-	//если элемент присутствует в словаре, то обновить его значение и переместить элемент в начало очереди
-	finded_item := cache.items[key]
-	if finded_item != nil {
-		finded_item.Value.(*cacheItem).value = value
-		cache.queue.MoveToFront(finded_item)
+	// если элемент присутствует в словаре, то обновить его значение и переместить элемент в начало очереди
+
+	if findedItem := cache.items[key]; findedItem != nil {
+		findedItem.Value.(*cacheItem).value = value
+		cache.queue.MoveToFront(findedItem)
 		return true
 	}
 	cache.items[key] = cache.queue.PushFront(&cacheItem{
@@ -54,16 +54,16 @@ type cacheItem struct {
 }
 
 func (cache *lruCache) Clear() {
-	first_item := cache.queue.Front()
-	for first_item != nil {
-		delete(cache.items, first_item.Value.(*cacheItem).key) //удаляем их кеша
-		if first_item.Next == nil {                            //если последний элемент очереди удялем и выходим из ципла
-			cache.queue.Remove(first_item)
+	firstItem := cache.queue.Front()
+	for firstItem != nil {
+		delete(cache.items, firstItem.Value.(*cacheItem).key) // удаляем их кеша
+		if firstItem.Next == nil {                            // если последний элемент очереди удялем и выходим из ципла
+			cache.queue.Remove(firstItem)
 			break
 		}
-		first_item = first_item.Next //перемещаем курсор на следующий элемент
-		if first_item.Prev != nil {
-			cache.queue.Remove(first_item.Prev) //удаляем предыдущий
+		firstItem = firstItem.Next // перемещаем курсор на следующий элемент
+		if firstItem.Prev != nil {
+			cache.queue.Remove(firstItem.Prev) // удаляем предыдущий
 		}
 	}
 }
