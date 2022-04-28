@@ -49,9 +49,60 @@ func TestCache(t *testing.T) {
 		require.Nil(t, val)
 	})
 
-	t.Run("purge logic", func(t *testing.T) {
-		// Write me
+	t.Run("purge logic", func(t *testing.T) { //на логику выталкивания элементов из-за размера очереди
+		c := NewCache(3)
+		c.Set("a", 1)
+		c.Set("b", 2)
+		c.Set("c", 3)
+		c.Set("d", 4)
+		//c b a
+		val, ok := c.Get("a")
+		require.False(t, ok)
+		require.Nil(t, val)
+
 	})
+	t.Run("purge old item logic", func(t *testing.T) { //на логику выталкивания давно используемых элементов
+		c := NewCache(3)
+		c.Set("a", 1)
+		c.Set("b", 2)
+		c.Set("c", 3)
+		//c b a
+		c.Set("a", 11)
+		//a c b
+		c.Get("b")
+		//b a c
+		c.Set("d", 4)
+		//d b a
+		val, ok := c.Get("c")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+	})
+	t.Run("purge old item logic", func(t *testing.T) { //Очистка
+		c := NewCache(3)
+		c.Set("a", 1)
+		c.Set("b", 2)
+		c.Set("c", 3)
+		//c b a
+		c.Clear()
+
+		val, ok := c.Get("a")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+		val, ok = c.Get("b")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+		val, ok = c.Get("c")
+		require.False(t, ok)
+		require.Nil(t, val)
+
+		wasInCache := c.Set("a", 4)
+
+		require.False(t, wasInCache)
+	})
+
 }
 
 func TestCacheMultithreading(t *testing.T) {
