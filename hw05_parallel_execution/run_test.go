@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"math/rand"
+	"runtime"
 	"sync/atomic"
 	"testing"
 	"time"
@@ -67,4 +68,53 @@ func TestRun(t *testing.T) {
 		require.Equal(t, runTasksCount, int32(tasksCount), "not all tasks were completed")
 		require.LessOrEqual(t, int64(elapsedTime), int64(sumTime/2), "tasks were run sequentially?")
 	})
+
+	//количество горутин после выполнения (если объясните почему их 3, буду рад)
+	t.Run("number of goroutines", func(t *testing.T) {
+		tasksCount := 50
+		tasks := make([]Task, 0, tasksCount)
+
+		for i := 0; i < tasksCount; i++ {
+
+			tasks = append(tasks, func() error {
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(100)))
+				return nil
+			})
+		}
+		workersCount := 10
+		maxErrorsCount := 1
+		err := Run(tasks, workersCount, maxErrorsCount)
+		require.NoError(t, err)
+		num := runtime.NumGoroutine()
+		require.Equal(t, num, 3, "number of goroutines must by 3")
+	})
+
+	//проверяем что таски выполняются если не превышенно количество не удачных
+	t.Run("number of good tasks", func(t *testing.T) {
+		tasksCount := 25
+		tasks := make([]Task, 0, tasksCount)
+		var runTasksCount int32
+		for i := 0; i < tasksCount; i++ {
+			tasks = append(tasks, func() error {
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(100)))
+				atomic.AddInt32(&runTasksCount, 1)
+				return nil
+			})
+		}
+		//bad tasks
+		tasks_err := fmt.Errorf("error")
+		for i := 0; i < tasksCount; i++ {
+			tasks = append(tasks, func() error {
+				time.Sleep(time.Millisecond * time.Duration(rand.Intn(100)))
+				return tasks_err
+			})
+		}
+
+		workersCount := 10
+		maxErrorsCount := 26
+		err := Run(tasks, workersCount, maxErrorsCount)
+		require.NoError(t, err)
+		require.Equal(t, int32(25), runTasksCount, "number of goroutines must by 3")
+	})
+
 }
